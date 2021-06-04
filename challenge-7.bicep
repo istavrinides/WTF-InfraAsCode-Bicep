@@ -70,7 +70,7 @@ module createVM './challenge-7-module.bicep' = [for i in range(1, 2): {
     adminPassword: adminPassword
     prefix: prefix
     uri: uri
-    index: '${i}'
+    index: string(i)
     secGroupId: secgroup.id
     subNetId: vnet.properties.subnets[0].id
     lbBackEndPool: loadBalancer.properties.backendAddressPools[0].id
@@ -81,11 +81,11 @@ resource publicIPlb 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   name: '${prefix}-publicIP-LB'
   location: resourceGroup().location
   sku: {
-    name: 'Basic'
+    name: 'Standard'
     tier: 'Regional'
   }
   properties: {
-    publicIPAllocationMethod: 'Dynamic'
+    publicIPAllocationMethod: 'Static'
     publicIPAddressVersion: 'IPv4'
   }
 }
@@ -100,6 +100,7 @@ resource loadBalancer 'Microsoft.Network/loadBalancers@2021-02-01' = {
   properties: {
     frontendIPConfigurations: [
       {
+        name: 'lbFrontEnd'
         properties: {
           publicIPAddress: {
             id: publicIPlb.id
@@ -109,7 +110,7 @@ resource loadBalancer 'Microsoft.Network/loadBalancers@2021-02-01' = {
     ]
     backendAddressPools: [
       {
-        name: resourceId('Microsoft.Network/loadBalancers/backendAddressPools','${prefix}-LB','${prefix}-lbBackEndPools')
+        name: 'LoadBalancerBackendPool'
       }
     ]
   }

@@ -59,7 +59,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' = {
     storageProfile: {
       osDisk: {
         osType: 'Linux'
-        name: 'OS-Disk'
+        name: 'OS-Disk-${index}'
         createOption: 'FromImage'
       }
       imageReference: {
