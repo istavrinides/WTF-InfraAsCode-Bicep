@@ -1,0 +1,14 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminPassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/fd50e94d-af5d-4589-8991-fed07e756d85/resourceGroups/wth-iac/providers/Microsoft.KeyVault/vaults/wth-akv"
+                },
+                "secretName": "adminPassword"
+            }
+        }
+    }
+}
