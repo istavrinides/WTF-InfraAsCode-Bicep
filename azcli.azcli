@@ -1,0 +1,12 @@
+# Challenge-01
+az group create --name wth-iac --location "West Europe"
+az deployment group create --name challenge-01 --resource-group wth-iac --template-file challenge-1.bicep
+#  check and update azcli    it requres 2.2
+az --version
+az --upgrade
+# Challenge-02
+az deployment group create --name challenge-02 --resource-group wth-iac --template-file challenge-2.bicep
+# Challenge-03
+az deployment group create --name challenge-03 --resource-group wth-iac --template-file challenge-3.bicep
+# Challenge-04
+az deployment group create --name challenge-04 --resource-group wth-iac --template-file challenge-4.bicep --parameters challenge-4.parameters.json

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.255.40792",
+      "templateHash": "6806218573875822683"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-11-01",
+      "name": "iostavri-vnet-wth",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "192.168.1.0/24"
+          ]
+        },
+        "subnets": [
+          {
+            "id": "iostavri-wth-subnet-01",
+            "properties": {
+              "addressPrefixes": [
+                "192.168.1.0/26"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
