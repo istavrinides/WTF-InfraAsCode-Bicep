@@ -69,16 +69,17 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-11-01' = {
   }
 }
 
-module createVM './challenge-7-module.bicep' = [for i in range(1, 2): {
+module createVM './challenge-8-module.bicep' = [for i in range(1, 2): {
   name: '${prefix}-VM-${i}'
   params: {
     adminPassword: adminPassword
     prefix: prefix
     uri: uri
-    index: string(i)
+    index: i
     secGroupId: secgroup.id
     subNetId: vnet.properties.subnets[0].id
     lbBackEndPool: loadBalancer.properties.backendAddressPools[0].id
+    lbName: lbName
   }
 }]
 
@@ -162,6 +163,40 @@ resource loadBalancer 'Microsoft.Network/loadBalancers@2021-02-01' = {
         name: 'probe01'
       }
     ]
+    // inboundNatRules: [
+    //   {
+    //     name: 'Test'
+    //     properties: {
+    //       frontendIPConfiguration: {
+    //         id: resourceId('Microsoft.Network/loadBalancers/frontendIpConfigurations', lbName, 'lbFrontEnd')
+    //       }
+
+    //       frontendPort: 20022
+    //       backendPort: 22
+    //       enableFloatingIP: false
+    //       idleTimeoutInMinutes: 4
+    //       protocol: 'Tcp'
+
+    //       enableTcpReset: false
+    //     }
+    //   }
+    //   {
+    //     name: 'Test2'
+    //     properties: {
+    //       frontendIPConfiguration: {
+    //         id: resourceId('Microsoft.Network/loadBalancers/frontendIpConfigurations', lbName, 'lbFrontEnd')
+    //       }
+
+    //       frontendPort: 20023
+    //       backendPort: 22
+    //       enableFloatingIP: false
+    //       idleTimeoutInMinutes: 4
+    //       protocol: 'Tcp'
+
+    //       enableTcpReset: false
+    //     }
+    //   }
+  //]
   }
 }
 
