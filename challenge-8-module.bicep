@@ -5,7 +5,7 @@ param uri string
 param index int
 param secGroupId string
 param subNetId string
-param lbBackEndPool string
+param lbBackEndPoolId string
 param lbName string
 
 /*resource publicIP 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
@@ -54,7 +54,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
   //        }
           loadBalancerBackendAddressPools: [
             {
-              id: lbBackEndPool
+              id: lbBackEndPoolId
             }
           ]
           loadBalancerInboundNatRules: [

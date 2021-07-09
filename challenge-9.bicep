@@ -1,7 +1,7 @@
 @secure()
 param adminPassword string
 param prefix string = 'wth128937'
-param uri string = 'https://wthstorageiostavri.blob.core.windows.net/staging/install-apache.sh?sp=r&st=2021-06-04T07:48:46Z&se=2021-07-04T15:48:46Z&spr=https&sv=2020-02-10&sr=b&sig=ijQOOAd%2Fh73NUPQqS7i2XTDUCXolsE6%2FRaRBIIRd7GE%3D'
+param uri string = 'https://wthstorageiostavri.blob.core.windows.net/staging/install-apache.sh?sp=r&st=2021-07-09T07:37:47Z&se=2022-07-09T15:37:47Z&spr=https&sv=2020-08-04&sr=b&sig=RECwoyqfEJknzWitG8Roi41yrj3FSmI%2Fuzf4iOfkU6s%3D'
 
 var lbName = '${prefix}-LB'
 
@@ -69,19 +69,18 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-11-01' = {
   }
 }
 
-module createVM './challenge-8-module.bicep' = [for i in range(1, 2): {
-  name: '${prefix}-VM-${i}'
+module createVM './challenge-9-module.bicep' = {
+  name: '${prefix}-VMSS'
   params: {
     adminPassword: adminPassword
     prefix: prefix
     uri: uri
-    index: i
-    secGroupId: secgroup.id
     subNetId: vnet.properties.subnets[0].id
     lbBackEndPoolId: loadBalancer.properties.backendAddressPools[0].id
-    lbName: lbName
+    lbProbeId: loadBalancer.properties.probes[0].id
+    lbInboundNatPoolId: loadBalancer.properties.inboundNatPools[0].id
   }
-}]
+}
 
 resource publicIPlb 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   name: '${prefix}-publicIP-LB'
@@ -133,24 +132,38 @@ resource loadBalancer 'Microsoft.Network/loadBalancers@2021-02-01' = {
       }
     ]
     loadBalancingRules: [
+        {
+          name: 'LBRules'
+          properties: {
+            frontendIPConfiguration: {
+              id: resourceId('Microsoft.Network/loadBalancers/frontendIpConfigurations', lbName, 'lbFrontEnd')
+            }
+            backendAddressPool: {
+              id: resourceId('Microsoft.Network/loadBalancers/backendAddressPools', lbName, 'LoadBalancerBackendPool')
+            }
+            probe: {
+              id: resourceId('Microsoft.Network/loadBalancers/probes', lbName, 'probe01')
+            }
+            protocol: 'Tcp'
+            frontendPort: 80
+            backendPort: 80
+            idleTimeoutInMinutes: 5
+          }
+      }
+    ]
+    inboundNatPools: [
       {
-        name: 'LBRules'
-        properties: {
+        name: '${prefix}-in-nat-pool'
+        properties:{
+          backendPort: 22
           frontendIPConfiguration: {
             id: resourceId('Microsoft.Network/loadBalancers/frontendIpConfigurations', lbName, 'lbFrontEnd')
           }
-          backendAddressPool: {
-            id: resourceId('Microsoft.Network/loadBalancers/backendAddressPools', lbName, 'LoadBalancerBackendPool')
-          }
-          probe: {
-            id: resourceId('Microsoft.Network/loadBalancers/probes', lbName, 'probe01')
-          }
           protocol: 'Tcp'
-          frontendPort: 80
-          backendPort: 80
-          idleTimeoutInMinutes: 5
+          frontendPortRangeStart: 20020
+          frontendPortRangeEnd: 20120
         }
-    }
+      }
     ]
     probes: [
       {
@@ -163,40 +176,6 @@ resource loadBalancer 'Microsoft.Network/loadBalancers@2021-02-01' = {
         name: 'probe01'
       }
     ]
-    // inboundNatRules: [
-    //   {
-    //     name: 'Test'
-    //     properties: {
-    //       frontendIPConfiguration: {
-    //         id: resourceId('Microsoft.Network/loadBalancers/frontendIpConfigurations', lbName, 'lbFrontEnd')
-    //       }
-
-    //       frontendPort: 20022
-    //       backendPort: 22
-    //       enableFloatingIP: false
-    //       idleTimeoutInMinutes: 4
-    //       protocol: 'Tcp'
-
-    //       enableTcpReset: false
-    //     }
-    //   }
-    //   {
-    //     name: 'Test2'
-    //     properties: {
-    //       frontendIPConfiguration: {
-    //         id: resourceId('Microsoft.Network/loadBalancers/frontendIpConfigurations', lbName, 'lbFrontEnd')
-    //       }
-
-    //       frontendPort: 20023
-    //       backendPort: 22
-    //       enableFloatingIP: false
-    //       idleTimeoutInMinutes: 4
-    //       protocol: 'Tcp'
-
-    //       enableTcpReset: false
-    //     }
-    //   }
-  //]
   }
 }
 

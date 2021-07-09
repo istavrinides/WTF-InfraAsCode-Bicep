@@ -10,3 +10,13 @@ az deployment group create --name challenge-02 --resource-group wth-iac --templa
 az deployment group create --name challenge-03 --resource-group wth-iac --template-file challenge-3.bicep
 # Challenge-04
 az deployment group create --name challenge-04 --resource-group wth-iac --template-file challenge-4.bicep --parameters challenge-4.parameters.json
+# Challenge-05
+az deployment group create --name challenge-05 --resource-group wth-iac --template-file challenge-5.bicep --parameters challenge-5.parameters.json
+# Challenge-06
+az deployment group create --name challenge-06 --resource-group wth-iac --template-file challenge-6.bicep --parameters challenge-6.parameters.json
+# Challenge-07
+az deployment group create --name challenge-07 --resource-group wth-iac --template-file challenge-7.bicep --parameters challenge-7.parameters.json
+# Challenge-08
+az deployment group create --name challenge-08 --resource-group wth-iac --template-file challenge-8.bicep --parameters challenge-8.parameters.json
+# Challenge-09
+az deployment group create --name challenge-09 --resource-group wth-iac --template-file challenge-9.bicep --parameters challenge-9.parameters.json
