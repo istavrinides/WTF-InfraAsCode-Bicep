@@ -112,7 +112,7 @@ resource vmss 'Microsoft.Compute/virtualMachineScaleSets@2019-03-01' = {
 }
 
 resource autoscaler 'microsoft.insights/autoscalesettings@2015-04-01' = {
-  name: '${prefix}-autoscaler'
+  name: '${prefix}-autoscaler-cpu'
   location: resourceGroup().location
   tags: {}
   properties: {

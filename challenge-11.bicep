@@ -69,7 +69,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-11-01' = {
   }
 }
 
-module createVM './challenge-9-module.bicep' = {
+module createVM './challenge-11-module.bicep' = {
   name: '${prefix}-VMSS'
   params: {
     adminPassword: adminPassword
